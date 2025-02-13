@@ -1,0 +1,82 @@
+<div class="container mt-4">
+  <h2>{{ editMode ? 'Uredi Auto' : 'Dodaj Novi Auto' }}</h2>
+
+  <form [formGroup]="carForm" (ngSubmit)="onSubmit()">
+    <h4 class="mt-3">Osnovne informacije</h4>
+    <div class="mb-3">
+      <label class="form-label">Marka</label>
+      <input type="text" class="form-control" formControlName="marka">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Model</label>
+      <input type="text" class="form-control" formControlName="model">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Godina</label>
+      <input type="number" class="form-control" formControlName="godina">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Prijeđeni kilometri</label>
+      <input type="number" class="form-control" formControlName="kilometraza">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Cijena (€)</label>
+      <input type="number" class="form-control" formControlName="cijena">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">URL Slike</label>
+      <input type="file" class="form-control" formControlName="slika" (change)="onFileSelected($event)">
+    </div>
+
+    <h4 class="mt-4">Specifikacije</h4>
+    
+    <div class="mb-3">
+      <label class="form-label">Zapremina motora (cm³)</label>
+      <input type="number" class="form-control" formControlName="motor">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Snaga (KS)</label>
+      <input type="number" class="form-control" formControlName="snaga">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Boja</label>
+      <input type="text" class="form-control" formControlName="boja">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Vrsta goriva</label>
+      <select class="form-control" formControlName="gorivo">
+        <option value="benzin">Benzin</option>
+        <option value="dizel">Dizel</option>
+        <option value="hibrid">Hibrid</option>
+        <option value="električni">Električni</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Mjenjač</label>
+      <select class="form-control" formControlName="mjenjac">
+        <option value="manualni">Manualni</option>
+        <option value="automatski">Automatski</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Pogon</label>
+      <select class="form-control" formControlName="pogon">
+        <option value="FWD">Prednji (FWD)</option>
+        <option value="RWD">Stražnji (RWD)</option>
+        <option value="AWD">Svi kotači (AWD)</option>
+      </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ editMode ? 'Spremi Promjene' : 'Dodaj Auto' }}</button>
+  </form>
+</div>

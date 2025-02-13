@@ -1,0 +1,27 @@
+
+<body>
+    <div class="container">
+        <div class="gallery">
+            <div class="main-image">
+                <img src="{{car.slika}}" alt="Slika automobila">
+            </div>
+        </div>
+        <div class="details">
+            <div>
+                <h1>{{car.marka}} {{car.model}}</h1>
+                <p><strong>Godina:</strong> {{car.godina}}</p>
+                <p><strong>Prijeđena kilometraža:</strong> {{car.kilometri}} km</p>
+                <p><strong>Snaga motora:</strong> {{car.snaga}} KS</p>
+                <p><strong>Zapremnina motora:</strong> {{car.motor}} cm³</p>
+            </div>
+            <div>
+                <p><strong>Tip goriva:</strong> {{car.gorivo}}</p>
+                <p><strong>Mjenjač:</strong> {{car.mjenjac}}</p>
+                <p><strong>Boja:</strong> {{car.boja}}</p>
+                <p><strong>Pogon:</strong> {{car.pogon}}</p>
+                <div class="price">Cijena: {{car.cijena | euroCurrency}}</div>
+            </div>
+        </div>
+        <a href="#" class="buy-btn">Kupi auto</a>
+    </div>
+</body>
