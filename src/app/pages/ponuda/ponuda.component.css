@@ -3,6 +3,33 @@
 
 }
 
+.search-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 100px;
+  }
+  
+  .search-section input {
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid #ced4da;
+  }
+  
+  .search-section button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+  }
+  
+  .search-section button:hover {
+    background-color: #007bff;
+    color: white;
+  }
 
 .section-title {
     font-size: 2rem;

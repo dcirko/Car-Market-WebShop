@@ -157,6 +157,24 @@ app.put('/api/automobili/:id', upload.single('slika'), (req, res) => {
 });
 
 
+/*buyCar*/
+app.post('/api/kupi', (req, res) => {
+    const {korisnik_id, automobil_id, cijena, nacinPlacanja} = req.body;
+    const sql = `INSERT INTO kupnje (korisnik_id, automobil_id, cijena, nacin_placanja) VALUES (?, ?, ?, ?)`;
+
+    db.query(sql, [korisnik_id, automobil_id, cijena, nacinPlacanja], (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri kupnji:', err);
+            res.status(500).send('Greška pri kupnji');
+        } else {
+            res.json({ message: '✅ Kupnja uspješna!' });
+        }
+    });
+
+
+});
+
+
 app.listen(3000, () => {
     console.log('🚀 Server pokrenut na portu 3000');
 });

@@ -1,14 +1,30 @@
 <div class="container mt-5">
+  <div class="search-section text-center mt-4">
+    <h3>Pretraži automobile</h3>
+    <input 
+      type="text" 
+      class="form-control w-50 mx-auto" 
+      placeholder="Unesite marku ili model..."
+      [(ngModel)]="searchQuery" 
+      (input)="search()"
+    >
+  </div>
+
   <div class="featured-cars mt-5">
     <h3 class="section-title text-center">Ponuda Vozila</h3>
+    
+    <div *ngIf="cars.length === 0" class="text-center text-muted">
+      Nema rezultata pretrage.
+    </div>
+
     <div class="row justify-content-center">
       <div *ngFor="let car of cars" class="col-md-4">
         <div class="car-card">
           <img [src]="car.slika" class="car-img" alt="{{ car.marka }} {{ car.model }}">
           <div class="car-details">
             <h5 class="car-title">{{ car.marka }} {{ car.model }}</h5>
-            <p class="car-info">Godina: {{ car.godina }}  |  {{car.kilometri}} Km</p>
-            <p class="car-price"><strong>{{ car.cijena | euroCurrency}}</strong></p>
+            <p class="car-info">Godina: {{ car.godina }} | {{car.kilometri}} Km</p>
+            <p class="car-price"><strong>{{ car.cijena | euroCurrency }}</strong></p>
             <button [routerLink]="['/car-page', car.id]" class="btn btn-warning">Detalji</button>
           </div>
         </div>

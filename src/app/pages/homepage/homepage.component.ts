@@ -46,5 +46,7 @@ export class HomepageComponent implements OnInit {
   ponuda(){
     this.router.navigate(['/ponuda']);
   }
+
+  
   
 }
