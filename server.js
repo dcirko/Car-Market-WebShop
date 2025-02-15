@@ -175,6 +175,43 @@ app.post('/api/kupi', (req, res) => {
 });
 
 
+
+/*getKupnje*/
+app.get('/api/kupnje/:korisnik_id', (req, res) => {
+    const korisnik_id = req.params.korisnik_id;
+
+    //const sql = `SELECT * FROM kupnje WHERE korisnik_id = ?`;
+    const sql = `SELECT k.*, a.marka, a.model, a.godina, a.cijena, a.slika, a. kilometri 
+                FROM kupnje k JOIN automobili a ON k.automobil_id = a.id WHERE k.korisnik_id = ?`;
+
+
+    db.query(sql, [korisnik_id], (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri dohvaćanju kupnji:', err);
+            res.status(500).send('Greška pri dohvaćanju kupnji');
+        } else {
+            res.json(result);
+        }
+    });
+});
+
+/*getUsers*/
+app.get('/api/korisnici/:korisnik_id', (req, res) => {
+    const korisnik_id = req.params.korisnik_id;
+
+    const sql = `SELECT * FROM users where id = ?`;
+
+    db.query(sql, [korisnik_id], (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri dohvaćanju korisnika:', err);
+            res.status(500).send('Greška pri dohvaćanju korisnika');
+        } else {
+            res.json(result);
+        }
+    });
+});
+
+
 app.listen(3000, () => {
     console.log('🚀 Server pokrenut na portu 3000');
 });

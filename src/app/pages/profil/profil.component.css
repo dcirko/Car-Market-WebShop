@@ -1,0 +1,112 @@
+.profile-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header {
+    text-align: center;
+    padding-bottom: 40px;
+    padding-top: 30px;
+    border-bottom: 2px solid #ddd;
+    margin-bottom: 40px;
+  }
+  
+  .profile-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+  }
+  
+  .profile-details h2 {
+    margin: 20px;
+    color: #343a40;
+  }
+  
+  .profile-details p {
+    margin: 10px 0;
+    color: #555;
+  }
+  
+  .purchase-section {
+    margin-top: 20px;
+    
+  }
+
+
+  .purchase-section h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 40px;
+  }
+  
+  .purchase-card {
+    display: flex;
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+  }
+  
+  .purchase-card:hover {
+    transform: scale(1.02);
+  }
+  
+  .car-img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .purchase-details {
+    margin-left: 15px;
+  }
+  
+  .purchase-details h4 {
+    margin: 0;
+    color: #007bff;
+  }
+  
+  .purchase-details p {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+ 
+
+  .no-purchases {
+    text-align: center;
+    color: #777;
+    font-style: italic;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;  
+    margin-top: 20px;      
+    margin-bottom: 30px;   
+  }
+  
+  .btn {
+    font-size: 1.2rem;
+    padding: 12px 20px;
+    border-radius: 10px;
+    transition: 0.3s ease-in-out;
+    max-width: 300px;
+    margin: 0;  
+  }
+  
+  .btn:hover {
+    background-color: transparent;
+    color: blue;
+    border-color: blue;
+  }
+  

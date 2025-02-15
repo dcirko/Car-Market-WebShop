@@ -1,0 +1,35 @@
+<div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-info">
+        <div *ngIf="user" class="profile-details">
+          <h2>{{ user.username }}</h2>
+          <p><strong>Name:</strong> {{ user.name }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="purchase-section">
+      <h2>Moje kupnje</h2>
+      <div *ngIf="kupnje.length > 0; else noPurchases">
+        <div class="purchase-card" *ngFor="let auto of kupnje">
+          <img [src]="auto.slika" alt="{{ auto.marka }} {{ auto.model }}" class="car-img">
+          <div class="purchase-details">
+            <h4>{{ auto.marka }} {{ auto.model }}</h4>
+            <p><strong>Godina:</strong> {{ auto.godina }}</p>
+            <p><strong>Cijena:</strong> {{ auto.cijena | euroCurrency }}</p>
+            <p><strong>Datum kupnje:</strong> {{ auto.datum | date:'dd.MM.yyyy' }}</p>
+            <p><strong>Prijeđeni kilometri:</strong> {{ auto.kilometri }} Km</p>
+          </div>
+        </div>
+      </div>
+      
+      <ng-template #noPurchases>
+        <p class="no-purchases">Nema kupljenih vozila.</p>
+        <div class="button-container">
+          <a routerLink="ponuda" class="btn btn-primary btn-lg">Pregledaj ponudu vozila</a>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  
