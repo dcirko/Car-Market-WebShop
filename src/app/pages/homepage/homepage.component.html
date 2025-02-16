@@ -18,7 +18,7 @@
             <h5 class="car-title">{{ car.marka }} {{ car.model }}</h5>
             <p class="car-info">Godina: {{ car.godina }} | {{car.kilometri}} Km</p>
             <p class="car-price"><strong>{{ car.cijena | euroCurrency}}</strong></p>
-            <!--<button (click)="editCar(car)" class="btn btn-warning">Uredi</button>-->
+            <button (click)="editCar(car)" class="btn btn-warning">Uredi</button>
             <button [routerLink]="['/car-page', car.id]" class="btn btn-warning">Detalji</button>
           </div>
         </div>

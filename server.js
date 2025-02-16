@@ -39,48 +39,6 @@ db.connect(err => {
 });
 
 
-/*getCars*/
-app.get('/api/automobili', (req, res) => {
-    const limit = req.query.limit ? parseInt(req.query.limit) : null;
-    
-    let query = 'SELECT * FROM automobili';
-    if (limit) {
-        query += ' ORDER BY cijena DESC LIMIT ?';
-    }
-
-    db.query(query, limit ? [limit] : [], (err, result) => {
-        if (err) {
-            console.error('❌ Greška pri dohvaćanju podataka:', err);
-            res.status(500).send('Greška pri dohvaćanju podataka');
-        } else {
-            const automobili = result.map(car => ({
-                ...car,
-                slika: `${car.slika}`
-            }));
-            res.json(automobili);
-        }
-    });
-});
-
-
-/*carPage*/
-app.get('/api/automobili/:id', (req, res) => {
-    db.query('SELECT * FROM automobili WHERE id = ?', [req.params.id], (err, result) => {
-        if (err) {
-            console.error('❌ Greška pri dohvaćanju podataka:', err);
-            res.status(500).send('Greška pri dohvaćanju podataka');
-        } else if (result.length === 0) {
-            res.status(404).send('Automobil nije pronađen');
-        } else {
-            const car = result[0];
-            res.json({
-                ...car,
-                slika: `${car.slika}`
-            });
-        }
-    });
-});
-
 
 /*getSpecs*/
 app.get('/api/automobili/:id/specifikacije', (req, res) => {
@@ -104,6 +62,31 @@ app.get('/api/automobili/:id/specifikacije', (req, res) => {
         }
     });
 });
+
+app.get('/api/automobili', (req, res) => {
+    const limit = req.query.limit ? parseInt(req.query.limit) : null;
+
+    let query = `
+        SELECT a.*, s.snaga, s.motor, s.boja, s.gorivo, s.mjenjac, s.pogon 
+        FROM automobili a
+        JOIN specifikacije s ON a.id = s.automobil_id
+        ORDER BY a.cijena DESC
+    `;
+
+    if (limit) {
+        query += ' LIMIT ?';
+    }
+
+    db.query(query, limit ? [limit] : [], (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri dohvaćanju podataka:', err);
+            res.status(500).send('Greška pri dohvaćanju podataka');
+        } else {
+            res.json(result);
+        }
+    });
+});
+
 
 
 
@@ -173,6 +156,8 @@ app.post('/api/kupi', (req, res) => {
 
 
 });
+
+
 
 
 

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyPipe } from "../../currency.pipe";
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-car-page',
@@ -16,29 +17,32 @@ export class CarPageComponent {
   car: any;
   nacinPlacanja: string = 'gotovina';
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router, private apiService: ApiService) {}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id'); 
     console.log(id);
 
-    if (id) {
-      this.http.get(`http://localhost:3000/api/automobili/${id}/specifikacije`).subscribe(data => {
+    this.apiService.getCarById(id).subscribe(
+      (data) => {
+        console.log('✅ Podaci dohvaćeni iz API-ja:', data);
         this.car = data;
-        console.log(this.car);
-      });
-    }
+      },
+      (error) => {
+        console.error('❌ Greška pri dohvaćanju automobila:', error);
+      }
+    )
   }
   buyCar() {
     const podaciKupnje = {
-      korisnik_id: 1,
+      korisnik_id: 2,
       automobil_id: this.car.id,
       cijena: this.car.cijena,
       nacinPlacanja: this.nacinPlacanja,
 
     }
 
-    this.http.post('http://localhost:3000/api/kupi', podaciKupnje).subscribe(
+    this.apiService.buyCar(podaciKupnje).subscribe(
       (data) => {
         console.log('🚗 Auto je uspješno kupljen:', data);
         alert('Auto je uspješno kupljen!');
@@ -49,6 +53,7 @@ export class CarPageComponent {
         alert('Greška pri kupnji auta!');
       }
     );
+
   }
 
 

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { CurrencyPipe } from "../../currency.pipe";
+import { ApiService } from '../../services/api.service';
 
 
 @Component({
@@ -16,14 +17,14 @@ export class HomepageComponent implements OnInit {
   featuredCars: any[] = [];
   top3Cars: any[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private apiService: ApiService) {}
 
   ngOnInit() {
     this.fetchTop3Cars();
   }
 
   fetchTop3Cars() {
-    this.http.get<any[]>('http://localhost:3000/api/automobili?limit=3').subscribe(
+    this.apiService.getAllCars(3).subscribe(
       (data) => {
         console.log('🏆 Top 3 najskuplja auta:', data);
         this.top3Cars = data;
@@ -32,6 +33,7 @@ export class HomepageComponent implements OnInit {
         console.error('❌ Greška pri dohvaćanju top 3 automobila:', error);
       }
     );
+
   }
 
   editCar(car: any) {

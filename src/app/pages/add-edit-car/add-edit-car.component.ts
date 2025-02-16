@@ -3,6 +3,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-add-edit-car',
@@ -21,7 +22,8 @@ export class AddEditCarComponent {
     private fb: FormBuilder,
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private apiService: ApiService
   ) {}
 
   ngOnInit() {
@@ -53,7 +55,13 @@ export class AddEditCarComponent {
         model: car.model,
         godina: car.godina,
         cijena: car.cijena,
-        kilometraza: car.kilometri
+        kilometraza: car.kilometri,
+        motor: car.motor,
+        snaga: car.snaga,
+        boja: car.boja,
+        gorivo: car.gorivo,
+        mjenjac: car.mjenjac,
+        pogon: car.pogon
       });
 
       this.carForm.get('slika')?.clearValidators();
@@ -100,17 +108,18 @@ export class AddEditCarComponent {
       console.log('Auto podaci:', carData);
 
       if (this.editMode) {
-          this.http.put(`http://localhost:3000/api/automobili/${this.carId}`, this.carForm.value).subscribe(() => {
+        this.apiService.updateCar(this.carId, formData).subscribe(() => { 
           alert('✅ Auto uspješno ažuriran!');
           localStorage.removeItem('editCar');
           this.router.navigate(['/']);
         });
+        
       } else {
-          this.http.post('http://localhost:3000/api/automobili', formData).subscribe(() => {
-          alert('✅ Auto uspješno dodan!');
-          localStorage.removeItem('editCar');
-          this.router.navigate(['/']);
-        });
+          this.apiService.addCar(formData).subscribe(() => {
+            alert('✅ Auto uspješno dodan!');
+            localStorage.removeItem('editCar');
+            this.router.navigate(['/']);
+          });
       }
 
       this.carForm.reset();

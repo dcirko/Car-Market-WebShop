@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { CurrencyPipe } from "../../currency.pipe";
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-ponuda',
@@ -17,23 +18,25 @@ export class PonudaComponent {
   allCars: any[] = [];
   searchQuery: string = '';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private apiService: ApiService) {}
 
   ngOnInit() {
     this.fetchCars();
   }
 
   fetchCars() {
-    this.http.get<any[]>('http://localhost:3000/api/automobili').subscribe(
+    this.apiService.getAllCars().subscribe(
       (data) => {
         console.log('✅ Podaci dohvaćeni iz API-ja:', data);
-        this.allCars = data; // Spremamo originalnu listu
-        this.cars = [...this.allCars]; // Kopiramo u prikazanu listu
+        this.allCars = data; 
+        this.cars = [...this.allCars]; 
       },
       (error) => {
         console.error('❌ Greška pri dohvaćanju automobila:', error);
       }
     );
+
+   
   }
 
   search(){
