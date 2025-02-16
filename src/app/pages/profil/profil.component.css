@@ -35,7 +35,8 @@
   
   .purchase-section {
     margin-top: 20px;
-    
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 40px;
   }
 
 

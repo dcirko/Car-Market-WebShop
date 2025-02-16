@@ -31,5 +31,11 @@
         </div>
       </ng-template>
     </div>
+
+    <div class="add-car-section text-center mt-4" *ngIf="user?.id === 1">
+      <a (click)="addCar()" class="btn btn-success btn-lg">
+        <i class="fas fa-plus"></i> Dodaj Novi Auto
+      </a>
+    </div>
   </div>
   

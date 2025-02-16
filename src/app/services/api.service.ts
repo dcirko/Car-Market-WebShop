@@ -26,6 +26,11 @@ export class ApiService {
   buyCar(kupnja: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/kupi`, kupnja);
   }
+
+  isCarBought(carId: number, userId: number) {
+    return this.http.get<{ kupjen: boolean }>(`http://localhost:3000/api/automobili/${carId}/status-kupnje/${userId}`);
+  }
+  
   /* */ 
 
   /*addEditCar*/

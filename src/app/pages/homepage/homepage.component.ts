@@ -16,11 +16,14 @@ import { ApiService } from '../../services/api.service';
 export class HomepageComponent implements OnInit {
   featuredCars: any[] = [];
   top3Cars: any[] = [];
+  
 
   constructor(private http: HttpClient, private router: Router, private apiService: ApiService) {}
 
   ngOnInit() {
+
     this.fetchTop3Cars();
+    
   }
 
   fetchTop3Cars() {
@@ -35,11 +38,6 @@ export class HomepageComponent implements OnInit {
     );
 
   }
-
-  editCar(car: any) {
-    localStorage.setItem('editCar', JSON.stringify(car));  
-    this.router.navigate(['/uredi-auto']);
-  }
   
   addCar() {
     this.router.navigate(['/dodaj-auto']);
@@ -49,6 +47,7 @@ export class HomepageComponent implements OnInit {
     this.router.navigate(['/ponuda']);
   }
 
+  
   
   
 }

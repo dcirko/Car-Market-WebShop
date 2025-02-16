@@ -18,17 +18,11 @@
             <h5 class="car-title">{{ car.marka }} {{ car.model }}</h5>
             <p class="car-info">Godina: {{ car.godina }} | {{car.kilometri}} Km</p>
             <p class="car-price"><strong>{{ car.cijena | euroCurrency}}</strong></p>
-            <button (click)="editCar(car)" class="btn btn-warning">Uredi</button>
             <button [routerLink]="['/car-page', car.id]" class="btn btn-warning">Detalji</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="add-car-section text-center mt-4">
-    <a (click)="addCar()" class="btn btn-success btn-lg">
-      <i class="fas fa-plus"></i> Dodaj Novi Auto
-    </a>
   </div>
 </div>
   <section class="why-choose-us">

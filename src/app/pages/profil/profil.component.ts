@@ -16,20 +16,21 @@ import { ApiService } from '../../services/api.service';
 export class ProfilComponent {
   kupnje: any[] = [];
   user: any = {};
+  idKorisnika: number = 0;
 
   constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private apiService: ApiService) {}
 
   ngOnInit() {
+    //const idKorisnika = this.route.snapshot.paramMap.get('idKorisnika'); 
+    this.idKorisnika = 1;
+    console.log(this.idKorisnika);
+
     this.getKupnjeKorisnika();
     this.getUser();
   }
 
   getKupnjeKorisnika() {
-    //const idKorisnika = this.route.snapshot.paramMap.get('idKorisnika'); 
-    const idKorisnika = 2;
-    console.log(idKorisnika);
-
-    this.apiService.getUserPurchases(idKorisnika).subscribe(
+    this.apiService.getUserPurchases(this.idKorisnika).subscribe(
       (data) => {
         console.log('✅ Podaci dohvaćeni iz API-ja:', data);
         this.kupnje = data;
@@ -42,11 +43,8 @@ export class ProfilComponent {
   }
 
   getUser() {
-    //const idKorisnika = this.route.snapshot.paramMap.get('idKorisnika'); 
-    const idKorisnika = 2;
-    console.log(idKorisnika);
 
-    this.apiService.getUserById(idKorisnika).subscribe(
+    this.apiService.getUserById(this.idKorisnika).subscribe(
       (data) => {
         console.log('✅ Podaci dohvaćeni iz API-ja:', data);
         this.user = data[0];
@@ -56,6 +54,10 @@ export class ProfilComponent {
       }
     );
 
+  }
+
+  addCar() {
+    this.router.navigate(['/dodaj-auto']);
   }
 
 }

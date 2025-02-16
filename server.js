@@ -117,27 +117,80 @@ app.post('/api/automobili', upload.single('slika'), (req, res) => {
 
 /*editCar*/
 app.put('/api/automobili/:id', upload.single('slika'), (req, res) => {
-    const { marka, model, godina, kilometraza, cijena } = req.body;
-    let sql, params;
+    const automobilId = req.params.id;
+    const { marka, model, godina, kilometraza, cijena, motor, snaga, boja, gorivo, mjenjac, pogon } = req.body;
+    
+    let sqlAutomobil, paramsAutomobil;
 
     if (req.file) {
         const slika = `images/${req.file.filename}`;
-        sql = 'UPDATE automobili SET marka = ?, model = ?, godina = ?, cijena = ?, slika = ?, kilometri = ? WHERE id = ?';
-        params = [marka, model, godina, cijena, slika, kilometraza, req.params.id];
+        sqlAutomobil = `UPDATE automobili 
+                        SET marka = ?, model = ?, godina = ?, cijena = ?, slika = ?, kilometri = ? 
+                        WHERE id = ?`;
+        paramsAutomobil = [marka, model, godina, cijena, slika, kilometraza, automobilId];
     } else {
-        sql = 'UPDATE automobili SET marka = ?, model = ?, godina = ?, cijena = ?, kilometri = ? WHERE id = ?';
-        params = [marka, model, godina, cijena, kilometraza, req.params.id];
+        sqlAutomobil = `UPDATE automobili 
+                        SET marka = ?, model = ?, godina = ?, cijena = ?, kilometri = ? 
+                        WHERE id = ?`;
+        paramsAutomobil = [marka, model, godina, cijena, kilometraza, automobilId];
     }
 
-    db.query(sql, params, (err, result) => {
+    db.query(sqlAutomobil, paramsAutomobil, (err, result) => {
         if (err) {
             console.error('❌ Greška pri ažuriranju automobila:', err);
-            res.status(500).send('Greška pri ažuriranju automobila');
-        } else {
-            res.json({ message: '✅ Automobil ažuriran!' });
+            return res.status(500).send('Greška pri ažuriranju automobila');
         }
+
+        const sqlSpecifikacije = `UPDATE specifikacije 
+                                  SET motor = ?, snaga = ?, boja = ?, gorivo = ?, mjenjac = ?, pogon = ? 
+                                  WHERE automobil_id = ?`;
+        const paramsSpecifikacije = [motor, snaga, boja, gorivo, mjenjac, pogon, automobilId];
+
+        db.query(sqlSpecifikacije, paramsSpecifikacije, (err, result) => {
+            if (err) {
+                console.error('❌ Greška pri ažuriranju specifikacija:', err);
+                return res.status(500).send('Greška pri ažuriranju specifikacija');
+            }
+            res.json({ message: '✅ Automobil i specifikacije ažurirani!' });
+        });
     });
 });
+
+
+/*deleteCar*/
+app.delete('/api/automobili/:id', (req, res) => {
+    const automobilId = req.params.id;
+
+    const sqlDeleteKupnje = 'DELETE FROM kupnje WHERE automobil_id = ?';
+    db.query(sqlDeleteKupnje, [automobilId], (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri brisanju kupnji:', err);
+            return res.status(500).send('Greška pri brisanju kupnji');
+        }
+
+        const sqlDeleteSpecifikacije = 'DELETE FROM specifikacije WHERE automobil_id = ?';
+        db.query(sqlDeleteSpecifikacije, [automobilId], (err, result) => {
+            if (err) {
+                console.error('❌ Greška pri brisanju specifikacija:', err);
+                return res.status(500).send('Greška pri brisanju specifikacija');
+            }
+
+            const sqlDeleteAutomobil = 'DELETE FROM automobili WHERE id = ?';
+            db.query(sqlDeleteAutomobil, [automobilId], (err, result) => {
+                if (err) {
+                    console.error('❌ Greška pri brisanju automobila:', err);
+                    return res.status(500).send('Greška pri brisanju automobila');
+                }
+                
+                res.json({ message: '✅ Automobil i svi povezani podaci obrisani!' });
+            });
+        });
+    });
+});
+
+
+
+
 
 
 /*buyCar*/
@@ -156,6 +209,22 @@ app.post('/api/kupi', (req, res) => {
 
 
 });
+
+
+app.get('/api/automobili/:carId/status-kupnje/:userId', (req, res) => {
+    const sql = 'SELECT COUNT(*) AS count FROM kupnje WHERE automobil_id = ? AND korisnik_id = ?';
+
+    db.query(sql, [req.params.carId, req.params.userId], (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri provjeri kupnje auta:', err);
+            return res.status(500).json({ error: 'Greška pri provjeri kupnje auta' });
+        }
+
+        const isBought = result[0].count > 0;
+        res.json({ kupljen: isBought });
+    });
+});
+
 
 
 

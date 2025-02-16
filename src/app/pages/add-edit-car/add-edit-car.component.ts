@@ -111,7 +111,7 @@ export class AddEditCarComponent {
         this.apiService.updateCar(this.carId, formData).subscribe(() => { 
           alert('✅ Auto uspješno ažuriran!');
           localStorage.removeItem('editCar');
-          this.router.navigate(['/']);
+          this.router.navigate(['/car-page', this.carId]);
         });
         
       } else {
