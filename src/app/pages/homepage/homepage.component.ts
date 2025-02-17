@@ -27,10 +27,10 @@ export class HomepageComponent implements OnInit {
   }
 
   fetchTop3Cars() {
-    this.apiService.getAllCars(3).subscribe(
+    this.apiService.getAllCars(3);  // Dohvatimo top 3 auta sa servera
+    this.apiService.topCars$.subscribe(
       (data) => {
-        console.log('🏆 Top 3 najskuplja auta:', data);
-        this.top3Cars = data;
+        this.top3Cars = data;  // Ažuriramo podatke u komponenti čim se podaci promijene
       },
       (error) => {
         console.error('❌ Greška pri dohvaćanju top 3 automobila:', error);

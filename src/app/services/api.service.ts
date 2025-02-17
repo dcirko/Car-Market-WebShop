@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +9,26 @@ import { Observable } from 'rxjs';
 export class ApiService {
   private apiUrl = 'http://localhost:3000/api';
 
+  private topCarsSubject = new BehaviorSubject<any[]>([]); 
+  topCars$ = this.topCarsSubject.asObservable(); 
+  private allCarsSubject = new BehaviorSubject<any[]>([]); 
+  allCars$ = this.allCarsSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   /*HomeIPonuda*/
-  getAllCars(limit?: number): Observable<any[]> {
+  getAllCars(limit?: number) {
     const url = limit ? `${this.apiUrl}/automobili?limit=${limit}` : `${this.apiUrl}/automobili`;
-    return this.http.get<any[]>(url);
+    this.http.get<any[]>(url).subscribe(
+      (data) => {
+        console.log( data);
+        this.topCarsSubject.next(data);  
+        this.allCarsSubject.next(data);
+      },
+      (error) => {
+        console.error('❌ Greška pri dohvaćanju automobila:', error);
+      }
+    );;
   }
   
 

@@ -14,6 +14,18 @@
     border-radius: 8px;
     text-align: center;
   }
+
+  .admin{
+    border: 1px solid white;
+    cursor: pointer;
+    color: #007bff;
+    margin-top: 5px;
+    padding: 10px;
+  }
+
+  .admin:hover{
+    text-decoration: underline;
+  }
   
   h2 {
     margin-bottom: 20px;

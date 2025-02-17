@@ -25,9 +25,11 @@ export class PonudaComponent {
   }
 
   fetchCars() {
-    this.apiService.getAllCars().subscribe(
+    
+
+    this.apiService.getAllCars();
+    this.apiService.allCars$.subscribe(
       (data) => {
-        console.log('✅ Podaci dohvaćeni iz API-ja:', data);
         this.allCars = data; 
         this.cars = [...this.allCars]; 
       },

@@ -28,8 +28,8 @@
         <button type="submit" class="btn">{{ isLogin ? 'Prijavi se' : 'Registriraj se' }}</button>
       </form>
 
-      <a (click)="admin()">Admin Prijava</a>
-  
+      <div class="admin"><a (click)="admin()">Admin Prijava</a>
+      </div>
       <p class="toggle-text">
         {{ isLogin ? 'Nemaš račun?' : 'Već imaš račun?' }}
         <a  (click)="toggleMode()">{{ isLogin ? 'Registriraj se' : 'Prijavi se' }}</a>
