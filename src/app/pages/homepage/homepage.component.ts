@@ -4,6 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { CurrencyPipe } from "../../currency.pipe";
 import { ApiService } from '../../services/api.service';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -16,28 +17,16 @@ import { ApiService } from '../../services/api.service';
 export class HomepageComponent implements OnInit {
   featuredCars: any[] = [];
   top3Cars: any[] = [];
-  
+  top3Cars$!: Observable<any[]>;
 
   constructor(private http: HttpClient, private router: Router, private apiService: ApiService) {}
 
   ngOnInit() {
-
-    this.fetchTop3Cars();
+    this.top3Cars$ = this.apiService.topCars$;
+    this.apiService.getAllCars(3);
     
   }
 
-  fetchTop3Cars() {
-    this.apiService.getAllCars(3);  // Dohvatimo top 3 auta sa servera
-    this.apiService.topCars$.subscribe(
-      (data) => {
-        this.top3Cars = data;  // Ažuriramo podatke u komponenti čim se podaci promijene
-      },
-      (error) => {
-        console.error('❌ Greška pri dohvaćanju top 3 automobila:', error);
-      }
-    );
-
-  }
   
   addCar() {
     this.router.navigate(['/dodaj-auto']);
