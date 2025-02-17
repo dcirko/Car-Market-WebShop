@@ -1,0 +1,39 @@
+<div class="auth-container">
+    <div class="auth-box">
+      <h2>{{ isLogin ? 'Prijava' : 'Registracija' }}</h2>
+  
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" [(ngModel)]="user.username" name="username" required />
+        </div>
+
+        <div *ngIf="!isLogin" class="form-group">
+            <label for="name">Ime</label>
+            <input type="text" id="name" [(ngModel)]="user.name" name="name" required />
+          </div>
+
+          
+        <div class="form-group">
+            <label for="password">Lozinka</label>
+            <input type="password" id="password" [(ngModel)]="user.password" name="password" required />
+          </div>
+
+        <div *ngIf="!isLogin" class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" [(ngModel)]="user.email" name="email" required />
+        </div>
+  
+  
+        
+  
+        <button type="submit" class="btn">{{ isLogin ? 'Prijavi se' : 'Registriraj se' }}</button>
+      </form>
+  
+      <p class="toggle-text">
+        {{ isLogin ? 'Nemaš račun?' : 'Već imaš račun?' }}
+        <a routerLink="prijava" (click)="toggleMode()">{{ isLogin ? 'Registriraj se' : 'Prijavi se' }}</a>
+      </p>
+    </div>
+  </div>
+  

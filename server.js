@@ -2,6 +2,8 @@ const express = require('express');
 const mysql = require('mysql');
 const cors = require('cors');
 const path = require('path');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(cors());
@@ -228,8 +230,6 @@ app.get('/api/automobili/:carId/status-kupnje/:userId', (req, res) => {
 
 
 
-
-
 /*getKupnje*/
 app.get('/api/kupnje/:korisnik_id', (req, res) => {
     const korisnik_id = req.params.korisnik_id;
@@ -249,6 +249,7 @@ app.get('/api/kupnje/:korisnik_id', (req, res) => {
     });
 });
 
+
 /*getUsers*/
 app.get('/api/korisnici/:korisnik_id', (req, res) => {
     const korisnik_id = req.params.korisnik_id;
@@ -264,6 +265,83 @@ app.get('/api/korisnici/:korisnik_id', (req, res) => {
         }
     });
 });
+
+
+
+app.post('/api/login', (req, res) => {
+    const {username, password} = req.body;
+
+    const sql = `SELECT * FROM users where username = ? AND password = ?`;
+
+    db.query(sql, [username, password, ], async (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri dohvaćanju korisnika:', err);
+            res.status(500).send('Greška pri dohvaćanju korisnika');
+        }
+
+        if(result.length === 0){
+            res.status(401).send('❌ Pogrešno korisničko ime ili lozinka');
+        }
+
+        const user = result[0];
+
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Neispravni login podaci' });
+        }
+
+        const token = jwt.sign({ id: user.id, username: user.username }
+            , 'tajna'
+            , { expiresIn: '1h' }
+        );
+
+        res.status(200).json({ message: 'Prijava uspješna!', token });
+        });
+});
+
+
+
+app.post('/api/register', async (req, res) => {
+    const { username, password, name, email } = req.body;
+
+    const sqlCheckUsername = 'SELECT * FROM users WHERE username = ?';
+    db.query(sqlCheckUsername, [username], async (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri provjeri korisničkog imena:', err);
+            return res.status(500).json({ error: 'Greška pri provjeri korisničkog imena' });
+        }
+
+        if (result.length > 0) {
+            return res.status(400).json({ error: 'Korisničko ime već postoji!' });
+        }
+
+        const sqlCheckEmail = 'SELECT * FROM users WHERE email = ?';
+        db.query(sqlCheckEmail, [email], async (err, result) => {
+            if (err) {
+                console.error('❌ Greška pri provjeri emaila:', err);
+                return res.status(500).json({ error: 'Greška pri provjeri emaila' });
+            }
+
+            if (result.length > 0) {
+                return res.status(400).json({ error: 'Email već postoji!' });
+            }
+
+            const hashedPassword = await bcrypt.hash(password, 12); 
+
+            const sqlInsert = 'INSERT INTO users (username, password, name, email) VALUES(?, ?, ?, ?)';
+            db.query(sqlInsert, [username, hashedPassword, name, email], (err, result) => {
+                if (err) {
+                    console.error('❌ Greška pri registraciji:', err);
+                    return res.status(500).json({ error: 'Greška pri registraciji' });
+                }
+
+                res.status(201).json({ message: '✅ Registracija uspješna!' });
+            });
+        });
+    });
+});
+
+
 
 
 app.listen(3000, () => {

@@ -4,6 +4,7 @@ import { AddEditCarComponent } from './pages/add-edit-car/add-edit-car.component
 import { PonudaComponent } from './pages/ponuda/ponuda.component';
 import { CarPageComponent } from './pages/car-page/car-page.component';
 import { ProfilComponent } from './pages/profil/profil.component';
+import { PrijavaComponent } from './pages/prijava/prijava.component';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'app-homepage', pathMatch: 'full'},
@@ -13,5 +14,6 @@ export const routes: Routes = [
     {path: 'ponuda', component: PonudaComponent},
     {path: 'car-page/:id', component: CarPageComponent},
     {path: 'profil/:id', component: ProfilComponent},
-    {path: 'profil/:id/ponuda', component: PonudaComponent}
+    {path: 'profil/:id/ponuda', component: PonudaComponent},
+    {path: 'prijava', component: PrijavaComponent}
 ];
