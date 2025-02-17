@@ -34,8 +34,8 @@
         <a (click)="confirmPurchase($event)" class="buy-btn">Kupi auto</a>
         
         <div class="button-container">
-            <button (click)="editCar(car)" class="btn btn-warning" *ngIf="user?.id === 1">Uredi auto</button>
-            <button (click)="deleteCar(car.id)" class="btn btn-danger" *ngIf="user?.id === 1">Obriši auto</button>
+            <button (click)="editCar(car)" class="btn btn-warning" *ngIf="user.role === 'admin'">Uredi auto</button>
+            <button (click)="deleteCar(car.id)" class="btn btn-danger" *ngIf="user.role === 'admin'">Obriši auto</button>
         </div>
           
     </div>

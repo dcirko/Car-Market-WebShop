@@ -9,7 +9,9 @@
             <li><a routerLink="/">Početna</a></li>
             <li><a routerLink="ponuda">Ponuda Vozila</a></li>      
             <li><a routerLink="profil/1">Moj Profil</a></li>
-            <li><a routerLink="prijava">Sign In</a></li>
+
+            <li *ngIf="!auth.isLoggedIn()"><a routerLink="prijava">Sign In</a></li>
+            <li *ngIf="auth.isLoggedIn()" (click)="logout()"><a>Log Out</a></li>
           </ul>
     
         </div>

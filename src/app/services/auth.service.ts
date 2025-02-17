@@ -8,14 +8,19 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  login(username: string, password: string) {
-    console.log('login', username, password);
-    return this.http.post('http://localhost:3000/api/login',  {username, password});
+  login(user : any) {
+    console.log('login', user);
+    return this.http.post('http://localhost:3000/api/login',  {user});
   }
 
-  register(user: any){
+  adminLogin(user : any) {
+    console.log('adminLogin', user);
+    return this.http.post('http://localhost:3000/api/adminLogin',  {user});
+  }
+
+  register(user : any) {
     console.log('register', user);
-    return this.http.put('http://localhost:3000/api/register', user);
+    return this.http.post('http://localhost:3000/api/register', {user});
   }
 
   saveToken(token: string) {
@@ -29,6 +34,7 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
+
 
   logout() {
     localStorage.removeItem('authToken');

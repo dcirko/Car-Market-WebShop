@@ -5,6 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CurrencyPipe } from "../../currency.pipe";
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import { jwtDecode } from 'jwt-decode';
+
 
 @Component({
   selector: 'app-car-page',
@@ -20,13 +23,17 @@ export class CarPageComponent {
   user: any = {};
   isBought: boolean = false;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router, private apiService: ApiService) {}
+  constructor(private route: ActivatedRoute, private http: HttpClient, private router: Router, private apiService: ApiService, private auth: AuthService) {}
 
   ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id'); 
     console.log(id);
 
-    this.idKorisnika = 1;
+    const token = this.auth.getToken();
+    if(token){
+      const decoded: any = jwtDecode(token);
+      this.idKorisnika = decoded.id;
+    }
     console.log(this.idKorisnika);
     this.getUser();
 
@@ -66,7 +73,7 @@ export class CarPageComponent {
     }
 
     const podaciKupnje = {
-      korisnik_id: 1,
+      korisnik_id: this.idKorisnika,
       automobil_id: this.car.id,
       cijena: this.car.cijena,
       nacinPlacanja: this.nacinPlacanja,
@@ -76,7 +83,7 @@ export class CarPageComponent {
       (data) => {
         console.log('🚗 Auto je uspješno kupljen:', data);
         alert('Auto je uspješno kupljen!');
-        this.isBought = true; // Ažuriramo status auta
+        this.isBought = true;
         this.router.navigate(['/']);
       },
       (error) => {

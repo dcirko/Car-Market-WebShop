@@ -34,6 +34,7 @@
     color: white;
     text-decoration: none;
     transition: 0.3s;
+    cursor: pointer;
   }
   
   .nav-links a:hover {

@@ -267,13 +267,57 @@ app.get('/api/korisnici/:korisnik_id', (req, res) => {
 });
 
 
-
+/*prijava*/
 app.post('/api/login', (req, res) => {
-    const {username, password} = req.body;
+    console.log("📩 Podaci primljeni na backend:", req.body);
+    const {user} = req.body;
 
-    const sql = `SELECT * FROM users where username = ? AND password = ?`;
+    
+    
+    const sql = `SELECT * FROM users where username = ?`;	
 
-    db.query(sql, [username, password, ], async (err, result) => {
+    db.query(sql, [user.username ], async (err, result) => {
+        if (err) {
+            console.error('❌ Greška pri dohvaćanju korisnika:', err);
+            return res.status(500).send('Greška pri dohvaćanju korisnika');
+        }
+
+        if(result.length === 0){
+            return res.status(401).send('❌ Pogrešno korisničko ime ili lozinka');
+        }
+
+        const user2 = result[0];
+        console.log('user2:', user2);
+        if(user2.role === 'admin'){
+            console.error('❌ Greška pri dohvaćanju korisnika:', err);
+            return res.status(500).send('Greška pri dohvaćanju korisnika');
+        }
+
+
+
+        const isMatch = await bcrypt.compare(user.password, user2.password);
+        if (!isMatch) {
+            return res.status(401).json({ error: 'Neispravni login podaci' });
+        }
+
+        const token = jwt.sign({ id: user2.id, username: user2.username }
+            , 'tajna'
+            , { expiresIn: '1h' }
+        );
+
+        return res.status(200).json({ message: 'Prijava uspješna!', token });
+        });
+});
+
+
+/*adminPrijava*/
+app.post('/api/adminLogin', (req, res) => {
+    console.log("📩 Podaci primljeni na backend:", req.body);
+    const {user} = req.body;
+
+    const sql = `SELECT * FROM users where username = ?`;	
+
+    db.query(sql, [user.username ], async (err, result) => {
         if (err) {
             console.error('❌ Greška pri dohvaćanju korisnika:', err);
             res.status(500).send('Greška pri dohvaćanju korisnika');
@@ -283,14 +327,15 @@ app.post('/api/login', (req, res) => {
             res.status(401).send('❌ Pogrešno korisničko ime ili lozinka');
         }
 
-        const user = result[0];
+        const user2 = result[0];
+        console.log('user2:', user2);
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(user.password, user2.password);
         if (!isMatch) {
             return res.status(401).json({ error: 'Neispravni login podaci' });
         }
 
-        const token = jwt.sign({ id: user.id, username: user.username }
+        const token = jwt.sign({ id: user2.id, username: user2.username }
             , 'tajna'
             , { expiresIn: '1h' }
         );
@@ -301,11 +346,14 @@ app.post('/api/login', (req, res) => {
 
 
 
+
 app.post('/api/register', async (req, res) => {
-    const { username, password, name, email } = req.body;
+    console.log("📩 Podaci primljeni na backend:", req.body);
+    const { user } = req.body;
+    
 
     const sqlCheckUsername = 'SELECT * FROM users WHERE username = ?';
-    db.query(sqlCheckUsername, [username], async (err, result) => {
+    db.query(sqlCheckUsername, [user.username], async (err, result) => {
         if (err) {
             console.error('❌ Greška pri provjeri korisničkog imena:', err);
             return res.status(500).json({ error: 'Greška pri provjeri korisničkog imena' });
@@ -316,7 +364,7 @@ app.post('/api/register', async (req, res) => {
         }
 
         const sqlCheckEmail = 'SELECT * FROM users WHERE email = ?';
-        db.query(sqlCheckEmail, [email], async (err, result) => {
+        db.query(sqlCheckEmail, [user.email], async (err, result) => {
             if (err) {
                 console.error('❌ Greška pri provjeri emaila:', err);
                 return res.status(500).json({ error: 'Greška pri provjeri emaila' });
@@ -326,16 +374,24 @@ app.post('/api/register', async (req, res) => {
                 return res.status(400).json({ error: 'Email već postoji!' });
             }
 
-            const hashedPassword = await bcrypt.hash(password, 12); 
+            const hashedPassword = await bcrypt.hash(user.password, 12); 
 
-            const sqlInsert = 'INSERT INTO users (username, password, name, email) VALUES(?, ?, ?, ?)';
-            db.query(sqlInsert, [username, hashedPassword, name, email], (err, result) => {
+            const sqlInsert = 'INSERT INTO users (username, password, name, email, role) VALUES(?, ?, ?, ?, ?)';
+            db.query(sqlInsert, [user.username, hashedPassword, user.name, user.email, user.role], (err, result) => {
                 if (err) {
                     console.error('❌ Greška pri registraciji:', err);
                     return res.status(500).json({ error: 'Greška pri registraciji' });
                 }
 
-                res.status(201).json({ message: '✅ Registracija uspješna!' });
+                const token = jwt.sign({ id: user.id, username: user.username, role: user.role }
+                    , 'tajna'
+                    , { expiresIn: '1h' }
+                );
+
+                res.status(201).json({
+                    message: '✅ Registracija uspješna!',
+                    token
+                });
             });
         });
     });

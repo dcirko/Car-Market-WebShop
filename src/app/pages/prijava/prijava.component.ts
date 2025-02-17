@@ -24,7 +24,14 @@ export class PrijavaComponent {
 
   onSubmit() {
     if (this.isLogin) {
-      this.auth.login(this.user.username, this.user.password).subscribe(
+      const userData = {
+        username: this.user.username,
+        password: this.user.password,
+        name: this.user.name,
+        email: this.user.email,
+        role: ''
+      };
+      this.auth.login(userData).subscribe(
         (res :any) => {
         
         console.log('✅ Prijava uspješna:', res);
@@ -36,7 +43,14 @@ export class PrijavaComponent {
         alert('Neispravan username ili password!');
       });
     } else {
-      this.auth.register(this.user).subscribe(
+      const userData = {
+        username: this.user.username,
+        password: this.user.password,
+        name: this.user.name,
+        email: this.user.email,
+        role: 'user'
+      };
+      this.auth.register(userData).subscribe(
         (res: any) => {
         console.log('✅ Registracija uspješna:', res);
         this.auth.saveToken(res.token);
@@ -49,6 +63,10 @@ export class PrijavaComponent {
       }
       )
     }
+  }
+
+  admin(){
+    this.router.navigate(['admin']);
   }
 
   toggleMode(){

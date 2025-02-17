@@ -5,6 +5,8 @@ import { CurrencyPipe } from "../../currency.pipe";
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
+import { AuthService } from '../../services/auth.service';
+import {jwtDecode} from 'jwt-decode';
 
 @Component({
   selector: 'app-profil',
@@ -16,14 +18,21 @@ import { ApiService } from '../../services/api.service';
 export class ProfilComponent {
   kupnje: any[] = [];
   user: any = {};
+  role: string = '';
   idKorisnika: number = 0;
+  isAdmin : boolean = false;
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private apiService: ApiService) {}
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private apiService: ApiService, private auth: AuthService) {}
 
   ngOnInit() {
-    //const idKorisnika = this.route.snapshot.paramMap.get('idKorisnika'); 
-    this.idKorisnika = 1;
-    console.log(this.idKorisnika);
+    const token = this.auth.getToken();
+    if (token) {
+      const decoded: any = jwtDecode(token);
+      this.idKorisnika = decoded.id;
+      console.log(this.role);
+    } else {
+      console.error('❌ Token is null');
+    }
 
     this.getKupnjeKorisnika();
     this.getUser();
@@ -43,7 +52,6 @@ export class ProfilComponent {
   }
 
   getUser() {
-
     this.apiService.getUserById(this.idKorisnika).subscribe(
       (data) => {
         console.log('✅ Podaci dohvaćeni iz API-ja:', data);
