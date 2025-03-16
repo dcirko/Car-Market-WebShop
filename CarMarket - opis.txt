@@ -1,0 +1,3 @@
+CarMarket
+
+Ovaj projekt je web aplikacija za prodaju automobila, razvijena u Angularu s Node.js backendom. Korisnici mogu pregledavati dostupne automobile, filtrirati ponudu i kupovati vozila putem aplikacije. Na stranici Moj profil se vide informacije o korisniku i njegove prijašnje kupnje. Administratori imaju mogućnost dodavanja, uređivanja i brisanja automobila.
